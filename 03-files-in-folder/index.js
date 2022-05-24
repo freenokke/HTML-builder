@@ -10,7 +10,7 @@ fsp.readdir(path.join(__dirname, 'secret-folder'))
         if (stats.isFile() === true) {
           const itemData = path.parse(item);
           const itemSize = stats.size; 
-          console.log(`${itemData.name} - ${itemData.ext ? itemData.ext : 'file has no extension'} - ${itemSize} byte`);
+          console.log(`${itemData.name} - ${itemData.ext ? itemData.ext.slice(1) : 'file has no extension'} - ${itemSize} byte`);
         }
       });
     });
