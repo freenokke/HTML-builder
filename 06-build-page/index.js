@@ -67,22 +67,10 @@ try {
     await fs.promises.mkdir(path.resolve(__dirname, 'project-dist', 'assets'), {recursive: true});
     mergeStyles();
     loadFiles(path.join(__dirname, 'assets'));
-    if (/\{\{header\}\}/.test(template)) {
-      const record = await insertLayout('header', template);
-      template = record;
-    }
-    if (/\{\{articles\}\}/.test(template)) {
-      const record = await insertLayout('articles', template);
-      template = record;
-    }
-    if (/\{\{footer\}\}/.test(template)) {
-      const record = await insertLayout('footer', template);
-      template = record;
-    }
-    if (/\{\{about\}\}/.test(template)) {
-      const record = await insertLayout('about', template);
-      template = record;
-    }
+    const activeComponents = template.match(/\{\{\w+\}\}/g)
+    for (component of activeComponents) {
+      template = await insertLayout(component.replace(/[\{\}]/gi, ''), template);
+    } 
     
     await fs.promises.appendFile(path.resolve(__dirname, 'project-dist', 'index.html'), template);
     
